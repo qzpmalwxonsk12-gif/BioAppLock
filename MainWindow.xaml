@@ -1,0 +1,850 @@
+<Window x:Class="BioAppLock.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="BioShield — Windows Hello Biometric &amp; PIN App Guard"
+        Width="1200" Height="820"
+        MinWidth="980" MinHeight="700"
+        WindowStartupLocation="CenterScreen"
+        Background="#070B14"
+        Foreground="#F8FAFC"
+        Loaded="Window_Loaded"
+        Closing="Window_Closing">
+
+    <Window.Resources>
+        <Style TargetType="CheckBox">
+            <Setter Property="Foreground" Value="#E2E8F0"/>
+            <Setter Property="FontSize" Value="12.5"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="22,16,22,16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="14"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- ==================== TOP HEADER BAR ==================== -->
+        <Border Grid.Row="0"
+                Background="#0F172A"
+                BorderBrush="#1E293B"
+                BorderThickness="1"
+                CornerRadius="14"
+                Padding="18,12">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Brand & Subtitle -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Width="44" Height="44"
+                            CornerRadius="12"
+                            Background="#1E3A8A"
+                            BorderBrush="#3B82F6"
+                            BorderThickness="1.5"
+                            Margin="0,0,14,0">
+                        <TextBlock Text="🛡️" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <StackPanel VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="BioShield App Guard"
+                                       FontSize="19"
+                                       FontWeight="Bold"
+                                       Foreground="#F8FAFC"
+                                       Margin="0,0,10,0"/>
+                            <Border x:Name="HelloStatusBadge"
+                                    Background="#132A1E"
+                                    BorderBrush="#10B981"
+                                    BorderThickness="1"
+                                    CornerRadius="12"
+                                    Padding="10,3"
+                                    VerticalAlignment="Center"
+                                    Margin="0,0,8,0">
+                                <TextBlock x:Name="HelloStatusText"
+                                           Text="🫆 Checking Windows Hello..."
+                                           Foreground="#34D399"
+                                           FontSize="11"
+                                           FontWeight="SemiBold"/>
+                            </Border>
+                            <Border Background="#172554"
+                                    BorderBrush="#3B82F6"
+                                    BorderThickness="1"
+                                    CornerRadius="12"
+                                    Padding="10,3"
+                                    VerticalAlignment="Center">
+                                <TextBlock Text="⚡ Always-On Background Daemon (Closing ✕ Keeps Protection Active)"
+                                           Foreground="#93C5FD"
+                                           FontSize="11"
+                                           FontWeight="SemiBold"/>
+                            </Border>
+                        </StackPanel>
+                        <TextBlock Text="Activates laptop Fingerprint / Windows Hello PIN whenever someone tries to open or switch to a protected app — even after closing this window."
+                                   Foreground="#94A3B8"
+                                   FontSize="12"
+                                   Margin="0,3,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Action Buttons & Master Protection Toggle -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button x:Name="PanicLockAllButton"
+                            Click="PanicLockAllButton_Click"
+                            Height="36"
+                            Padding="12,0"
+                            Background="#1E293B"
+                            Foreground="#FBBF24"
+                            BorderBrush="#475569"
+                            BorderThickness="1"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Cursor="Hand"
+                            Margin="0,0,8,0"
+                            ToolTip="Immediately minimizes all protected apps and arms Fingerprint/PIN lock (Hotkey: Ctrl+Alt+L)">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="8"
+                                        Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <TextBlock Text="🔒 Lock All (Ctrl+Alt+L)"/>
+                    </Button>
+
+                    <Button x:Name="HideToTrayButton"
+                            Click="HideToTrayButton_Click"
+                            Height="36"
+                            Padding="12,0"
+                            Background="#1E293B"
+                            Foreground="#CBD5E1"
+                            BorderBrush="#475569"
+                            BorderThickness="1"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Cursor="Hand"
+                            Margin="0,0,8,0"
+                            ToolTip="Closes this window while keeping BioShield running silently in the background">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="8"
+                                        Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <TextBlock Text="🗕 Hide to Background"/>
+                    </Button>
+
+                    <Button x:Name="MasterToggleBtn"
+                            Click="MasterToggleBtn_Click"
+                            Height="36"
+                            Padding="14,0"
+                            Background="#059669"
+                            Foreground="White"
+                            BorderThickness="0"
+                            FontSize="12.5"
+                            FontWeight="Bold"
+                            Cursor="Hand"
+                            Margin="0,0,8,0">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}"
+                                        CornerRadius="8"
+                                        Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <TextBlock x:Name="MasterToggleLabel" Text="● PROTECTION ACTIVE"/>
+                    </Button>
+
+                    <Button x:Name="FullExitButton"
+                            Click="FullExitButton_Click"
+                            Height="36"
+                            Padding="11,0"
+                            Background="#3B0712"
+                            Foreground="#FDA4AF"
+                            BorderBrush="#BE123C"
+                            BorderThickness="1"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Cursor="Hand"
+                            ToolTip="Completely stop BioShield (Requires Fingerprint / PIN verification)">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="8"
+                                        Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <TextBlock Text="⏻ Quit"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ==================== MAIN TWO-COLUMN BODY ==================== -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.15*"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="1.0*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ========== LEFT COLUMN: PROTECTED APPS & RUNNING WINDOWS ========== -->
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1.25*"/>
+                    <RowDefinition Height="14"/>
+                    <RowDefinition Height="0.95*"/>
+                </Grid.RowDefinitions>
+
+                <!-- CARD 1: PROTECTED APPLICATIONS LIST -->
+                <Border Grid.Row="0"
+                        Background="#0F172A"
+                        BorderBrush="#1E293B"
+                        BorderThickness="1"
+                        CornerRadius="14"
+                        Padding="18,14">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0" Margin="0,0,0,10">
+                            <StackPanel>
+                                <TextBlock Text="Protected Applications (Fingerprint / PIN Required)"
+                                           FontSize="15.5"
+                                           FontWeight="Bold"
+                                           Foreground="#F8FAFC"/>
+                                <TextBlock Text="Works when an app is minimized, switched to, or launched after being closed — even after you close the BioShield window!"
+                                           FontSize="11.5"
+                                           Foreground="#94A3B8"
+                                           TextWrapping="Wrap"
+                                           Margin="0,2,0,0"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Rules ListBox -->
+                        <ListBox x:Name="RulesListBox"
+                                 Grid.Row="1"
+                                 Background="#090D16"
+                                 BorderBrush="#1E293B"
+                                 BorderThickness="1"
+                                 HorizontalContentAlignment="Stretch"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 Margin="0,0,0,10">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#111827"
+                                            BorderBrush="#1E293B"
+                                            BorderThickness="1"
+                                            CornerRadius="8"
+                                            Padding="12,9"
+                                            Margin="2,3">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <CheckBox Grid.Column="0"
+                                                      IsChecked="{Binding IsEnabled, Mode=TwoWay}"
+                                                      Click="RuleCheckBox_Click"
+                                                      VerticalAlignment="Center"
+                                                      Margin="0,0,10,0"/>
+
+                                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding DisplayName}"
+                                                           Foreground="#F8FAFC"
+                                                           FontSize="13.5"
+                                                           FontWeight="SemiBold"/>
+                                                <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                                                    <TextBlock Text="Process: " Foreground="#64748B" FontSize="11.5"/>
+                                                    <TextBlock Text="{Binding ProcessName}" Foreground="#94A3B8" FontSize="11.5" FontWeight="Medium"/>
+                                                    <TextBlock Text="  •  Title Match: " Foreground="#64748B" FontSize="11.5"/>
+                                                    <TextBlock Text="{Binding TitleKeyword}" Foreground="#94A3B8" FontSize="11.5"/>
+                                                </StackPanel>
+                                            </StackPanel>
+
+                                            <!-- Status Pill -->
+                                            <Border Grid.Column="2"
+                                                    CornerRadius="6"
+                                                    Background="#1E293B"
+                                                    Padding="8,4"
+                                                    VerticalAlignment="Center"
+                                                    Margin="8,0">
+                                                <TextBlock Text="{Binding StatusText}"
+                                                           Foreground="{Binding StatusColor}"
+                                                           FontSize="11"
+                                                           FontWeight="Bold"/>
+                                            </Border>
+
+                                            <!-- Lock & Minimize Now Button -->
+                                            <Button Grid.Column="3"
+                                                    Content="🔒 Arm &amp; Minimize"
+                                                    Tag="{Binding}"
+                                                    Click="LockSingleAppBtn_Click"
+                                                    Height="28"
+                                                    Padding="10,0"
+                                                    Background="#1E3A8A"
+                                                    Foreground="#93C5FD"
+                                                    BorderThickness="0"
+                                                    FontSize="11.5"
+                                                    FontWeight="SemiBold"
+                                                    Cursor="Hand"
+                                                    Margin="0,0,6,0"
+                                                    ToolTip="Minimizes this app immediately and arms the Fingerprint/PIN lock">
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+
+                                            <!-- Remove Rule Button -->
+                                            <Button Grid.Column="4"
+                                                    Content="✕"
+                                                    Tag="{Binding}"
+                                                    Click="RemoveRuleBtn_Click"
+                                                    Width="28" Height="28"
+                                                    Background="#1E293B"
+                                                    Foreground="#94A3B8"
+                                                    BorderThickness="0"
+                                                    FontSize="11.5"
+                                                    Cursor="Hand"
+                                                    ToolTip="Remove rule">
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                        <!-- Add Custom Rule Row -->
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1.1*"/>
+                                <ColumnDefinition Width="1.0*"/>
+                                <ColumnDefinition Width="1.0*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox x:Name="NewAppNameInput"
+                                     Grid.Column="0"
+                                     Height="32"
+                                     Background="#090D16"
+                                     Foreground="White"
+                                     BorderBrush="#334155"
+                                     VerticalContentAlignment="Center"
+                                     Padding="8,0"
+                                     Margin="0,0,6,0"
+                                     ToolTip="Friendly Display Name (e.g. Google Chrome)"
+                                     Text="Google Chrome"/>
+
+                            <TextBox x:Name="NewProcessInput"
+                                     Grid.Column="1"
+                                     Height="32"
+                                     Background="#090D16"
+                                     Foreground="White"
+                                     BorderBrush="#334155"
+                                     VerticalContentAlignment="Center"
+                                     Padding="8,0"
+                                     Margin="0,0,6,0"
+                                     ToolTip="Process Name without .exe (e.g. chrome, Antigravity, Code)"
+                                     Text="chrome"/>
+
+                            <TextBox x:Name="NewTitleInput"
+                                     Grid.Column="2"
+                                     Height="32"
+                                     Background="#090D16"
+                                     Foreground="White"
+                                     BorderBrush="#334155"
+                                     VerticalContentAlignment="Center"
+                                     Padding="8,0"
+                                     Margin="0,0,8,0"
+                                     ToolTip="Optional Window Title Keyword"
+                                     Text=""/>
+
+                            <Button Grid.Column="3"
+                                    Content="+ Add App Rule"
+                                    Click="AddCustomRuleBtn_Click"
+                                    Height="32"
+                                    Padding="14,0"
+                                    Background="#2563EB"
+                                    Foreground="White"
+                                    BorderThickness="0"
+                                    FontSize="12.5"
+                                    FontWeight="SemiBold"
+                                    Cursor="Hand">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="7" Padding="{TemplateBinding Padding}">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <!-- CARD 2: ACTIVE DESKTOP WINDOWS PICKER -->
+                <Border Grid.Row="2"
+                        Background="#0F172A"
+                        BorderBrush="#1E293B"
+                        BorderThickness="1"
+                        CornerRadius="14"
+                        Padding="18,14">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0" Margin="0,0,0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Currently Open Applications on Your Laptop (1-Click Protect)"
+                                           FontSize="14.5"
+                                           FontWeight="Bold"
+                                           Foreground="#F8FAFC"/>
+                                <TextBlock Text="Click 'Protect App' next to any open window below to add it to BioShield."
+                                           FontSize="11.5"
+                                           Foreground="#94A3B8"/>
+                            </StackPanel>
+
+                            <Button Grid.Column="1"
+                                    Content="🔄 Refresh List"
+                                    Click="RefreshRunningWindowsBtn_Click"
+                                    Height="28"
+                                    Padding="10,0"
+                                    Background="#1E293B"
+                                    Foreground="#CBD5E1"
+                                    BorderThickness="0"
+                                    FontSize="11.5"
+                                    Cursor="Hand">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </Grid>
+
+                        <ListBox x:Name="RunningWindowsListBox"
+                                 Grid.Row="1"
+                                 Background="#090D16"
+                                 BorderBrush="#1E293B"
+                                 BorderThickness="1"
+                                 HorizontalContentAlignment="Stretch"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#111827"
+                                            CornerRadius="7"
+                                            Padding="10,7"
+                                            Margin="2,2">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,8,0">
+                                                <TextBlock Text="{Binding ProcessName}"
+                                                           Foreground="#38BDF8"
+                                                           FontSize="12.5"
+                                                           FontWeight="Bold"/>
+                                                <TextBlock Text="{Binding WindowTitle}"
+                                                           Foreground="#94A3B8"
+                                                           FontSize="11.5"
+                                                           TextTrimming="CharacterEllipsis"/>
+                                            </StackPanel>
+
+                                            <Border Grid.Column="1"
+                                                    Background="#1E293B"
+                                                    CornerRadius="5"
+                                                    Padding="7,2"
+                                                    VerticalAlignment="Center"
+                                                    Margin="0,0,8,0">
+                                                <TextBlock Text="{Binding StateLabel}"
+                                                           Foreground="#CBD5E1"
+                                                           FontSize="10.5"/>
+                                            </Border>
+
+                                            <Button Grid.Column="2"
+                                                    Content="🛡️ Protect App"
+                                                    Tag="{Binding}"
+                                                    Click="ProtectRunningWindowBtn_Click"
+                                                    Height="26"
+                                                    Padding="10,0"
+                                                    Background="#2563EB"
+                                                    Foreground="White"
+                                                    BorderThickness="0"
+                                                    FontSize="11.5"
+                                                    FontWeight="SemiBold"
+                                                    Cursor="Hand">
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- ========== RIGHT COLUMN: TEST SANDBOX, SETTINGS & AUDIT LOG ========== -->
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="12"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="12"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- CARD 1: INTERACTIVE SECURITY TEST LAB -->
+                <Border Grid.Row="0"
+                        Background="#0F172A"
+                        BorderBrush="#1E3A8A"
+                        BorderThickness="1.5"
+                        CornerRadius="14"
+                        Padding="18,12">
+                    <StackPanel>
+                        <TextBlock Text="🧪 Interactive Security Test Lab"
+                                   FontSize="14.5"
+                                   FontWeight="Bold"
+                                   Foreground="#F8FAFC"
+                                   Margin="0,0,0,4"/>
+
+                        <TextBlock Text="Test launching a minimized app or closing BioShield's window (✕) — protection continues in the background!"
+                                   Foreground="#94A3B8"
+                                   FontSize="11.5"
+                                   TextWrapping="Wrap"
+                                   Margin="0,0,0,10"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Button Grid.Column="0"
+                                    Click="LaunchDemoAppBtn_Click"
+                                    Height="36"
+                                    Background="#2563EB"
+                                    Foreground="White"
+                                    BorderThickness="0"
+                                    FontSize="12"
+                                    FontWeight="SemiBold"
+                                    Cursor="Hand">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="8" Padding="10,0">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                                <TextBlock Text="1. Launch &amp; Minimize Demo App"/>
+                            </Button>
+
+                            <Button Grid.Column="2"
+                                    Click="SimulateSnooperBtn_Click"
+                                    Height="36"
+                                    Background="#D97706"
+                                    Foreground="White"
+                                    BorderThickness="0"
+                                    FontSize="12"
+                                    FontWeight="SemiBold"
+                                    Cursor="Hand">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="8" Padding="10,0">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                                <TextBlock Text="2. Try Opening It (Trigger Lock)"/>
+                            </Button>
+                        </Grid>
+
+                        <Button Click="TestWindowsHelloDirectBtn_Click"
+                                Height="30"
+                                Margin="0,8,0,0"
+                                Background="#1E293B"
+                                Foreground="#38BDF8"
+                                BorderBrush="#334155"
+                                BorderThickness="1"
+                                FontSize="11.5"
+                                FontWeight="SemiBold"
+                                Cursor="Hand">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            CornerRadius="7">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <TextBlock Text="🫆 Test Laptop Windows Hello Fingerprint / PIN Prompt Directly"/>
+                        </Button>
+                    </StackPanel>
+                </Border>
+
+                <!-- CARD 2: AUTO-LOCK & BACKGROUND PERSISTENCE SETTINGS -->
+                <Border Grid.Row="2"
+                        Background="#0F172A"
+                        BorderBrush="#1E293B"
+                        BorderThickness="1"
+                        CornerRadius="14"
+                        Padding="18,12">
+                    <StackPanel>
+                        <TextBlock Text="Background Persistence &amp; Auto-Lock Settings"
+                                   FontSize="14.5"
+                                   FontWeight="Bold"
+                                   Foreground="#F8FAFC"
+                                   Margin="0,0,0,8"/>
+
+                        <CheckBox x:Name="ChkRunInBackgroundOnClose"
+                                  Content="Keep BioShield working in background when this window is closed (✕)"
+                                  Foreground="#34D399"
+                                  FontWeight="SemiBold"
+                                  Checked="SettingsCheckBox_Changed"
+                                  Unchecked="SettingsCheckBox_Changed"
+                                  Margin="0,0,0,6"/>
+
+                        <CheckBox x:Name="ChkKeepAliveAndStartup"
+                                  Content="Self-healing background watchdog &amp; auto-start with Windows"
+                                  Foreground="#93C5FD"
+                                  Checked="SettingsCheckBox_Changed"
+                                  Unchecked="SettingsCheckBox_Changed"
+                                  Margin="0,0,0,6"/>
+
+                        <CheckBox x:Name="ChkLockOnMinimize"
+                                  Content="Re-lock immediately when a protected app is minimized or closed"
+                                  Checked="SettingsCheckBox_Changed"
+                                  Unchecked="SettingsCheckBox_Changed"
+                                  Margin="0,0,0,6"/>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                            <CheckBox x:Name="ChkLockOnSwitchAway"
+                                      Content="Re-lock when switching to another app after:"
+                                      Checked="SettingsCheckBox_Changed"
+                                      Unchecked="SettingsCheckBox_Changed"
+                                      VerticalAlignment="Center"
+                                      Margin="0,0,8,0"/>
+                            <ComboBox x:Name="GraceSecondsCombo"
+                                      Width="86" Height="24"
+                                      SelectionChanged="GraceSecondsCombo_SelectionChanged"
+                                      VerticalContentAlignment="Center">
+                                <ComboBoxItem Content="1 sec" Tag="1"/>
+                                <ComboBoxItem Content="3 sec" Tag="3"/>
+                                <ComboBoxItem Content="5 sec" Tag="5"/>
+                                <ComboBoxItem Content="15 sec" Tag="15"/>
+                                <ComboBoxItem Content="30 sec" Tag="30"/>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <CheckBox x:Name="ChkAutoMinimizeOnLock"
+                                  Content="Automatically minimize protected app windows when re-locked"
+                                  Checked="SettingsCheckBox_Changed"
+                                  Unchecked="SettingsCheckBox_Changed"
+                                  Margin="0,0,0,8"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <CheckBox x:Name="ChkAllowBackupPin"
+                                      Grid.Column="0"
+                                      Content="Allow Backup Master PIN:"
+                                      Checked="SettingsCheckBox_Changed"
+                                      Unchecked="SettingsCheckBox_Changed"
+                                      VerticalAlignment="Center"
+                                      Margin="0,0,10,0"/>
+
+                            <PasswordBox x:Name="BackupPinConfigBox"
+                                         Grid.Column="2"
+                                         Height="26"
+                                         Background="#090D16"
+                                         Foreground="White"
+                                         BorderBrush="#334155"
+                                         VerticalContentAlignment="Center"
+                                         Padding="6,0"
+                                         Margin="0,0,8,0"/>
+
+                            <Button Grid.Column="3"
+                                    Content="Save PIN"
+                                    Click="SavePinBtn_Click"
+                                    Height="26"
+                                    Padding="12,0"
+                                    Background="#1E293B"
+                                    Foreground="#CBD5E1"
+                                    BorderThickness="0"
+                                    FontSize="11.5"
+                                    Cursor="Hand">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- CARD 3: SECURITY AUDIT LOG -->
+                <Border Grid.Row="4"
+                        Background="#0F172A"
+                        BorderBrush="#1E293B"
+                        BorderThickness="1"
+                        CornerRadius="14"
+                        Padding="18,12">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0" Margin="0,0,0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       Text="Live Security Audit Log (Interceptions &amp; Unlocks)"
+                                       FontSize="14.5"
+                                       FontWeight="Bold"
+                                       Foreground="#F8FAFC"/>
+                            <Button Grid.Column="1"
+                                    Content="Clear"
+                                    Click="ClearAuditLogBtn_Click"
+                                    Height="24"
+                                    Padding="8,0"
+                                    Background="#1E293B"
+                                    Foreground="#94A3B8"
+                                    BorderThickness="0"
+                                    FontSize="11"
+                                    Cursor="Hand">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="5" Padding="{TemplateBinding Padding}">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </Grid>
+
+                        <ListBox x:Name="AuditLogListBox"
+                                 Grid.Row="1"
+                                 Background="#090D16"
+                                 BorderBrush="#1E293B"
+                                 BorderThickness="1"
+                                 HorizontalContentAlignment="Stretch"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#111827"
+                                            CornerRadius="6"
+                                            Padding="10,6"
+                                            Margin="2,2">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="58"/>
+                                                <ColumnDefinition Width="86"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBlock Grid.Column="0"
+                                                       Text="{Binding TimeFormatted}"
+                                                       Foreground="#64748B"
+                                                       FontFamily="Consolas"
+                                                       FontSize="11.5"
+                                                       VerticalAlignment="Center"/>
+
+                                            <Border Grid.Column="1"
+                                                    Background="#1E293B"
+                                                    CornerRadius="4"
+                                                    Padding="5,2"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    Margin="0,0,8,0">
+                                                <TextBlock Text="{Binding EventType}"
+                                                           Foreground="{Binding BadgeColor}"
+                                                           FontSize="10"
+                                                           FontWeight="Bold"/>
+                                            </Border>
+
+                                            <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding AppName}"
+                                                           Foreground="#E2E8F0"
+                                                           FontSize="12"
+                                                           FontWeight="SemiBold"/>
+                                                <TextBlock Text="{Binding Details}"
+                                                           Foreground="#94A3B8"
+                                                           FontSize="11"
+                                                           TextWrapping="Wrap"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
