@@ -2,7 +2,7 @@
 
 
 
-Original local source files are unchanged. This private backup excludes credentials, signing keys, local configuration, dependencies, build caches, runtime data, and unrelated research/old backup folders. No build or functionality test was run as part of this upload.
+Original local source files are unchanged. This source snapshot excludes credentials, signing keys, local configuration, dependencies, build caches, runtime data, and unrelated research/old backup folders. No build or functionality test was run as part of this upload.
 
 ## Excluded paths
 
@@ -13,3 +13,10 @@ Original local source files are unchanged. This private backup excludes credenti
 ## Source completeness repair
 
 The required `Models/AppProtectionModels.cs` source was restored after an overly broad model-data exclusion. An isolated .NET 10 Release build with that file passed with 0 warnings and 0 errors. The local original project was not edited.
+
+
+
+
+## Final source/security review (2026-11-07)
+
+Fresh configurations no longer include an enabled preset backup PIN. See the README for remaining local-configuration security limits.

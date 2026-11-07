@@ -155,8 +155,8 @@ namespace BioAppLock.Models
         public bool LockOnSwitchAway { get; set; } = true;
         public int SwitchAwayGraceSeconds { get; set; } = 3;
         public bool AutoMinimizeOnLock { get; set; } = true;
-        public bool AllowBackupPin { get; set; } = true;
-        public string BackupPin { get; set; } = "1234";
+        public bool AllowBackupPin { get; set; } = false;
+        public string BackupPin { get; set; } = string.Empty;
         public bool RunInBackgroundOnClose { get; set; } = true;
         public bool KeepAliveGuardianEnabled { get; set; } = true;
         public bool StartWithWindows { get; set; } = true;

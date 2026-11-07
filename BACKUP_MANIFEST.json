@@ -1,85 +1,102 @@
 {
   "source_files": [
     {
+      "path": ".gitignore",
+      "size": 553,
+      "sha256": "7377ba9d4ea6a08845c9fd438baf506a89f0fb43c459435e0c6058d8bba314f4"
+    },
+    {
       "path": "App.xaml",
-      "sha256": "bb88a00bf1fe6ee6717905826333a4178a3e37e89b63c76696856a0bd5842545",
-      "size": 258
+      "size": 258,
+      "sha256": "bb88a00bf1fe6ee6717905826333a4178a3e37e89b63c76696856a0bd5842545"
     },
     {
       "path": "App.xaml.cs",
-      "sha256": "a5b1146f262487bf4e01cea411c1fe9e4c0ad0d6017aeaecf547662b7c1f1d88",
-      "size": 4872
+      "size": 4872,
+      "sha256": "a5b1146f262487bf4e01cea411c1fe9e4c0ad0d6017aeaecf547662b7c1f1d88"
     },
     {
       "path": "AssemblyInfo.cs",
-      "sha256": "3fac2af92385f676e9a941befd23fe38f0a5fa6167d4a3a88f07e730c5595ca3",
-      "size": 643
+      "size": 643,
+      "sha256": "3fac2af92385f676e9a941befd23fe38f0a5fa6167d4a3a88f07e730c5595ca3"
+    },
+    {
+      "path": "BACKUP_NOTES.md",
+      "size": 850,
+      "sha256": "52059ba77014571dca0c3a0e9b8542cd7f884f7e12b8eb0b82db43c63ea5f797"
     },
     {
       "path": "BioAppLock.csproj",
-      "sha256": "b20f6cb53076419455fb41078c807df54d19e866287384f205c1f7ef72461b64",
-      "size": 291
+      "size": 291,
+      "sha256": "b20f6cb53076419455fb41078c807df54d19e866287384f205c1f7ef72461b64"
     },
     {
       "path": "DemoTargetWindow.xaml",
-      "sha256": "974213ac25b112ab16fabcf26415f8b422f3de791bb239569194a2efc015a33a",
-      "size": 5707
+      "size": 5707,
+      "sha256": "974213ac25b112ab16fabcf26415f8b422f3de791bb239569194a2efc015a33a"
     },
     {
       "path": "DemoTargetWindow.xaml.cs",
-      "sha256": "634a0392d63cbed3be7e962c236d5458e8848264b3151b65cb8872ed6c1236e0",
-      "size": 1224
+      "size": 1224,
+      "sha256": "634a0392d63cbed3be7e962c236d5458e8848264b3151b65cb8872ed6c1236e0"
     },
     {
       "path": "LockShieldWindow.xaml",
-      "sha256": "ea5eab8836f15eb3c884f21f165a87cd59246aa2566f2fb4c18fa4787ebaf108",
-      "size": 13043
+      "size": 13043,
+      "sha256": "ea5eab8836f15eb3c884f21f165a87cd59246aa2566f2fb4c18fa4787ebaf108"
     },
     {
       "path": "LockShieldWindow.xaml.cs",
-      "sha256": "adb82c96b963a9ab3e52d1543e2ef39dee6b6e781b7850293ff68236c220e3bf",
-      "size": 7749
+      "size": 7749,
+      "sha256": "adb82c96b963a9ab3e52d1543e2ef39dee6b6e781b7850293ff68236c220e3bf"
     },
     {
       "path": "MainWindow.xaml",
-      "sha256": "9cc53720a3b3043b7ab31d6a7b2411afecf9a52c6a505813ad18ad7eaeb52c54",
-      "size": 49028
+      "size": 49028,
+      "sha256": "9cc53720a3b3043b7ab31d6a7b2411afecf9a52c6a505813ad18ad7eaeb52c54"
     },
     {
       "path": "MainWindow.xaml.cs",
-      "sha256": "51a306373e4da81584fa9647ab904e714ac69f6b1e754d513cc0acb9e4766bbc",
-      "size": 29729
-    },
-    {
-      "path": "Services/ConfigStorageService.cs",
-      "sha256": "49f4b1195ba8037d032fd09470291070b25c95759a34593800faf5498533b32d",
-      "size": 3348
-    },
-    {
-      "path": "Services/SystemTrayAndStartupService.cs",
-      "sha256": "f3e1ab10f531776e3f99e07d6d3f15f789f9f6015a22688b7705e3073c5d2abb",
-      "size": 7150
-    },
-    {
-      "path": "Services/Win32Api.cs",
-      "sha256": "ee969987c2d02ac5917a2747b9a9689a5572b7e6061ec0e7c5e31222194b9e86",
-      "size": 15625
-    },
-    {
-      "path": "Services/WindowGuardEngine.cs",
-      "sha256": "691b5a431381023af86b049ec4af531f4731ad50aaa4acf76e819c06cc1ab88f",
-      "size": 18205
-    },
-    {
-      "path": "Services/WindowsHelloService.cs",
-      "sha256": "3d6a0ba73afdada2ebdbbc7f1b501e8a90dcd69415a551971878854464973025",
-      "size": 16289
+      "size": 29729,
+      "sha256": "51a306373e4da81584fa9647ab904e714ac69f6b1e754d513cc0acb9e4766bbc"
     },
     {
       "path": "Models/AppProtectionModels.cs",
-      "sha256": "4f44da51c2cb070e1c00b0b04dc0cb0085e3dec5f5ecbde4cd39b4866b38b932",
-      "size": 5552
+      "size": 5725,
+      "sha256": "41747d47a0225210fa846faced4c09b6863942fa3f72e98a2358b175283676d4"
+    },
+    {
+      "path": "README.md",
+      "size": 4900,
+      "sha256": "f6efa6fe67f74ffb8eec3f2b5835731623e6f6223bf99a8c3032455c811fc35d"
+    },
+    {
+      "path": "Services/ConfigStorageService.cs",
+      "size": 3456,
+      "sha256": "5d7f91e94b58b06c8cdf9f554fd6a6d2ef033047c0b3b66f5130ec1ac6dfd407"
+    },
+    {
+      "path": "Services/SystemTrayAndStartupService.cs",
+      "size": 7150,
+      "sha256": "f3e1ab10f531776e3f99e07d6d3f15f789f9f6015a22688b7705e3073c5d2abb"
+    },
+    {
+      "path": "Services/Win32Api.cs",
+      "size": 15625,
+      "sha256": "ee969987c2d02ac5917a2747b9a9689a5572b7e6061ec0e7c5e31222194b9e86"
+    },
+    {
+      "path": "Services/WindowGuardEngine.cs",
+      "size": 18205,
+      "sha256": "691b5a431381023af86b049ec4af531f4731ad50aaa4acf76e819c06cc1ab88f"
+    },
+    {
+      "path": "Services/WindowsHelloService.cs",
+      "size": 16289,
+      "sha256": "3d6a0ba73afdada2ebdbbc7f1b501e8a90dcd69415a551971878854464973025"
     }
   ],
-  "hash_basis": "Prepared source bytes before Git line-ending normalization and README notice prefixes."
+  "hash_basis": "Prepared source bytes before Git line-ending normalization and README notice prefixes.",
+  "last_reviewed": "2026-11-07",
+  "manifest_scope": "Current reviewed source snapshot, excluding this manifest itself and untracked generated outputs."
 }

@@ -73,3 +73,7 @@ A process-level overlay/guard can be affected by termination, privileges, deskto
 The required C# model file was restored after the original backup filter accidentally excluded its `Models` folder. An isolated Release build with that restored file completed with **0 warnings and 0 errors** during this documentation update. This is a compile check, not a new biometric, background-guard or adversarial-security test.
 
 Local user configuration and build output are excluded from the repository. No standalone project license is supplied by this README.
+
+## Security audit notes
+
+New configurations leave the optional backup PIN disabled and unset. Choose your own PIN before enabling that fallback. Existing local configurations are preserved; change any old demonstration PIN yourself. PINs remain stored as plain text in the local configuration, and users/processes running as the same Windows account can modify that file or stop the app. This prototype is not an operating-system security boundary.

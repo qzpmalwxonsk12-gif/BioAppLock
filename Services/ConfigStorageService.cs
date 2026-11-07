@@ -65,8 +65,8 @@ namespace BioAppLock.Services
                 LockOnSwitchAway = false,
                 SwitchAwayGraceSeconds = 5,
                 AutoMinimizeOnLock = true,
-                AllowBackupPin = true,
-                BackupPin = "1234",
+                AllowBackupPin = false,
+                BackupPin = string.Empty,
                 Rules = new List<ProtectedAppRule>
                 {
                     new ProtectedAppRule
