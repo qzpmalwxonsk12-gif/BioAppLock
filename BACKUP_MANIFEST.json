@@ -74,6 +74,11 @@
       "path": "Services/WindowsHelloService.cs",
       "sha256": "3d6a0ba73afdada2ebdbbc7f1b501e8a90dcd69415a551971878854464973025",
       "size": 16289
+    },
+    {
+      "path": "Models/AppProtectionModels.cs",
+      "sha256": "4f44da51c2cb070e1c00b0b04dc0cb0085e3dec5f5ecbde4cd39b4866b38b932",
+      "size": 5552
     }
   ],
   "hash_basis": "Prepared source bytes before Git line-ending normalization and README notice prefixes."
